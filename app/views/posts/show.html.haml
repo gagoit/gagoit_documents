@@ -1,0 +1,64 @@
+%p#notice= notice
+
+.post
+  %h2
+    = @post.title
+  %h4 
+    by
+    = @post.created_by.name
+  %p
+    %i 
+      Last updated 
+      = @post.updated_at.strftime("%B %d, %Y")
+
+  %p 
+    = raw @post.body
+  %br
+
+  .comments
+    %h4
+      Comments
+    %p
+      Is this helpful? Your encouragement fuels the project. Please tweet or add a comment. Couldn't get something to work? For the example apps and tutorials, it's best to open an issue on GitHub so we can help you.
+    
+    %h4.comment-count 
+      = pluralize @post.comments.size, 'comment'
+
+    %ul
+      - @post.comments.each do |comment|
+        %li.row
+          .user-avatar.span1
+            = image_tag avatar_url(comment.created_by) 
+          .comment.span10
+            .header
+              %p 
+                %span.user-name
+                  = link_to comment.created_by.name, comment.created_by if comment.created_by
+                %span.action
+                  commented
+                %span.time-post
+                  = time_ago_in_words comment.created_at 
+                  ago
+
+            .body
+              %p 
+                = raw comment.body
+
+      %li.row
+        .span1
+          = image_tag 'no-avatar.jpg'
+        .span10
+          = form_for [@post, @post.comments.new] do |f|
+            %p 
+              = f.text_area :body, :rows => '3', :style => 'width: 100%;', :class => 'tinymce'
+            %p 
+              = f.submit "Post comment"
+
+  %br
+
+  - if current_user._id == @post.created_by._id
+    = link_to 'Edit', edit_post_path(@post)
+    \|
+  = link_to 'Back', posts_path
+
+= tinymce

@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1"}
+    %title= content_for?(:title) ? yield(:title) : "Gagoit Documents"
+    %meta{:content => content_for?(:description) ? yield(:description) : "Gagoit Documents", :name => "description"}
+    = stylesheet_link_tag :application, :media => "all"
+    = javascript_include_tag :application
+    = csrf_meta_tags
+    = yield(:head)
+  %body
+    %header.navbar.navbar-fixed-top
+      %nav.navbar-inner
+        .container
+          = render 'layouts/navigation'
+    #main{:role => "main"}
+      .container
+        .header 
+          = render 'layouts/header'
+        .content
+          .row
+            .span12
+              = render 'layouts/messages'
+              = yield
+          %footer

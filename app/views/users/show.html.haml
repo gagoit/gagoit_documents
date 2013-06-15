@@ -1,0 +1,31 @@
+.user-info
+  .row
+    .span2
+      = image_tag avatar_url(@user)
+    .span8
+      %table.table
+        %tr
+          %td
+            %p 
+              %b Name:
+          %td
+            = @user.name
+        %tr
+          %td
+            %p
+              %b E-mail: 
+          %td
+            = @user.email
+
+        %tr
+          %td
+            %p
+              %b About Me: 
+          %td
+            = @user.about_me
+
+        
+      = link_to 'Edit Profile', edit_user_registration_path(@user)
+      |
+      = link_to 'Change Password', edit_user_password_path
+          

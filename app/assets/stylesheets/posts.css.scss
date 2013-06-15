@@ -1,0 +1,89 @@
+// Place all the styles related to the posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.posts {
+	h2 a {
+		color: green;
+	}
+}
+
+.post {
+	ul {
+		list-style-type: none;
+		margin: 0;
+
+		li {
+			margin-bottom: 20px;
+
+		}
+	}
+  .comments {
+  	.user-name {
+  		a {
+  			color: blue;
+  		}
+  	}
+
+    .comment{
+      min-height: 32px;
+      border: 1px solid #CACACA;
+      background-color: #fff;
+
+      .header {
+        height: 17px;
+        padding: 5px 10px 5px 6px;
+        border-bottom: 1px solid #ccc;
+        background-color: #e1e1e1;
+        background-image: linear-gradient(#f8f8f8, #e1e1e1);
+        background-repeat: repeat-x;
+        p {
+          font-size: 12px;
+          margin: 0;
+        }
+      }
+
+      .action {
+        font-size: 12px;
+        color: #333333;
+      }
+
+      .time-post {
+        color: rgba(30,55,70,0.4);
+        float: right;
+      }
+
+      .body {
+        padding: 0;
+        color: #333;
+        font-size: 12px;
+        background: #fbfbfb;
+
+        p {
+          padding: 10px;
+        }
+      }
+    }
+    
+  	h4.comment-count {
+  		font-weight: normal;
+  		margin-bottom: 20px;
+  	}
+
+    
+  }
+}
+
+.new-post {
+  .field {
+    input, textarea {
+      width: 95%;
+    }
+  }
+}
+
+.update-post {
+	input[type=text], textarea {
+		width: 99%;
+	}
+}

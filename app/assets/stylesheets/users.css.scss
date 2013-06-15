@@ -1,0 +1,30 @@
+// Place all the styles related to the users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#user_remember_me {
+  margin-top: -2px;
+  margin-bottom: 0px;
+}
+
+.user-login ul {
+  list-style-type: none;
+}
+
+.user-info {
+	h2 {
+		color: red;
+	}
+
+	ul {
+	  list-style-type: none;
+  }
+
+  table {
+  	tr {
+  		td {
+  			border-top: none;
+  		}
+  	}
+  }
+}

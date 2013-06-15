@@ -1,0 +1,20 @@
+%h2
+  Edit Profile
+
+= form_for @user, :html => { :method => :put, :multipart => true } do |f|
+  %p
+    = f.label :name
+    
+    = f.text_field :name
+  %p
+    = f.label :email
+    
+    = f.email_field :email
+
+  %p
+    = f.label :about_me
+    = f.text_area :about_me, :size => '10x5'
+
+  %p= f.submit "Update"
+
+= link_to "Back", :back
