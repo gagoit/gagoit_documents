@@ -18,8 +18,6 @@
   .comments
     %h4
       Comments
-    %p
-      Is this helpful? Your encouragement fuels the project. Please tweet or add a comment. Couldn't get something to work? For the example apps and tutorials, it's best to open an issue on GitHub so we can help you.
     
     %h4.comment-count 
       = pluralize @post.comments.size, 'comment'
@@ -29,7 +27,7 @@
         %li.row
           .user-avatar.span1
             = image_tag avatar_url(comment.created_by) 
-          .comment.span10
+          .comment.span7
             .header
               %p 
                 %span.user-name
@@ -47,7 +45,7 @@
       %li.row
         .span1
           = image_tag 'no-avatar.jpg'
-        .span10
+        .span7
           = form_for [@post, @post.comments.new] do |f|
             %p 
               = f.text_area :body, :rows => '3', :style => 'width: 100%;', :class => 'tinymce'
@@ -56,7 +54,7 @@
 
   %br
 
-  - if current_user._id == @post.created_by._id
+  - if current_user && current_user._id == @post.created_by._id
     = link_to 'Edit', edit_post_path(@post)
     \|
   = link_to 'Back', posts_path

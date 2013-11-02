@@ -4,7 +4,11 @@ class PostsController < ApplicationController
   respond_to :html, :xml, :json
   
   def index
-    @posts = Post.all
+    if params[:category].blank?
+      @posts = Post.all
+    else
+      @posts = Post.by_category(params[:category])
+    end
 
     respond_to do |format|
       format.html # index.html.erb

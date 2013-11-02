@@ -1,0 +1,39 @@
+.navigation-block
+  / Main navigation
+  %nav.main-navigation.nav-collapse.collapse{:role => "navigation"}
+    %ul
+      %li
+        %a.no-submenu{:href => "#"}
+          %span.menu-analytic>
+          %span.menu-text
+            =t(".analytics")
+      %li.current
+        %a.no-submenu{:href => "#"}
+          %span.menu-point-engine>
+          %span.menu-text
+            =t(".point_engine")
+      %li
+        %a.no-submenu{:href => "#"}
+          %span.menu-reward>
+          %span.menu-text
+            =t(".rewards")
+      %li
+        %a.no-submenu{:href => '#'}
+          %span.menu-redemption>
+          %span.menu-text
+            =t(".redemptions")
+      %li
+        %a.no-submenu{:href => "#"}
+          %span.menu-email-campaign>
+          %span.menu-text
+            =t(".email_campaigns")
+      %li
+        %a.no-submenu{:href => "#"}
+          %span.menu-member>
+          %span.menu-text
+            =t(".members")
+      %li
+        %a.no-submenu{:href => "#"}
+          %span.menu-setting>
+          %span.menu-text
+            =t(".settings")

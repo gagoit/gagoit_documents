@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::Paperclip
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -27,14 +28,22 @@ class User
   field :name, :type => String
   field :about_me, :type => String
 
-  field :avatar, :type => String
-
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :about_me, 
       :avatar, :avatar_cache
 
   validates :name, :email, :presence => true, :uniqueness => {:case_sensitive => false}
 
-  mount_uploader :avatar, AvatarUploader
+  has_mongoid_attached_file :avatar,
+    :path => 'public/system/users/:id/:hash-:style.:extension',
+    :default_url => 'users/:no-avatar.jpg',
+    
+    :hash_secret => GagoitDocuments::Application.config.paperclip_token,
+
+    :styles => {
+      :original => ['1920x1680>', :jpg],
+      :small    => ['70x70#',   :jpg]
+    }
+  #mount_uploader :avatar, AvatarUploader
 
   ## Confirmable
   # field :confirmation_token,   :type => String

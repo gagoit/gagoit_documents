@@ -21,15 +21,8 @@
         .content
           - if current_user
             .row
-              - if params[:controller].include?("devise/") || params[:controller].to_s == "home" || params[:controller].to_s == "users"
-                = yield
-              - else
-                .span3.menu-bar
-                  = render :partial => 'layouts/menu'
-                  
-                .span9
-                  = render 'layouts/messages'
-                  = yield
+              = render 'layouts/messages'
+              = yield
           - else
             .row.center
               = yield

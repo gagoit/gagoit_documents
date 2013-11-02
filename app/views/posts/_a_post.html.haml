@@ -1,0 +1,18 @@
+%h2
+  - if title_is_link
+    = link_to post.title, post, :target => 'blank'
+  - else
+    = post.title
+%h4 
+  by
+  = post.created_by.name
+%p
+  %i 
+    Last updated 
+    = post.updated_at.strftime("%B %d, %Y")
+
+%p 
+  = raw post.body
+%br
+
+= yield

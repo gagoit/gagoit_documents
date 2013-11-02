@@ -1,3 +1,14 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.span3.menu-bar{
+	width: 200px;
+  li {
+    border-bottom: 1px solid #dedede !important;
+    
+    a {
+      color: #0088cc !important;
+      padding: 5px;
+    }
+  }
+}

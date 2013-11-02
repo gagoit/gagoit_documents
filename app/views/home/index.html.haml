@@ -1,15 +1,1 @@
-.posts
-  - @posts.each do |post|
-    %h2 
-      = link_to post.title, post, :target => 'blank'
-    %h4 
-      by
-      = post.created_by.name
-    %p
-      %i 
-        Last updated 
-        = post.updated_at.strftime("%B %d, %Y")
-
-    %p 
-      = raw post.body
-    %br
+= render :partial => "shared/about"

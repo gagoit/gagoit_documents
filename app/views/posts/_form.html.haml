@@ -7,6 +7,10 @@
           %li= msg
 
   .field
+    = f.label :category
+    = f.select :category, options_for_select(Post::CATEGORIES.invert, f.object.category)
+
+  .field
     = f.label :title
     = f.text_field :title
   .field

@@ -2,10 +2,49 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.span12 {
+  margin-left: 20px;
+}
 .posts {
+  p.no-post {
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 30px;
+  }
+  
 	h2 a {
 		color: green;
 	}
+  .post {
+    border: 1px solid #CACACA;
+    margin-bottom: 20px;
+    padding: 0 10px 0 10px;
+
+    .title {
+      p {
+        font-size: 30px;
+        line-height: 44px;
+        color: green;
+      }
+    }
+
+    .author {
+      p {
+        font-size: 14px;
+        color: black;
+      }
+    }
+
+    .last-update {
+      p {
+        font-size: 13px;
+      }
+    }
+
+    .post-content {
+
+    }
+  }
 }
 
 .post {
@@ -14,8 +53,7 @@
 		margin: 0;
 
 		li {
-			margin-bottom: 20px;
-
+			margin-bottom: 5px;
 		}
 	}
   .comments {
@@ -60,7 +98,7 @@
         background: #fbfbfb;
 
         p {
-          padding: 10px;
+          padding: 0 10px;
         }
       }
     }

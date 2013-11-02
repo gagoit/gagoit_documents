@@ -1,0 +1,11 @@
+- current_category = params[:category]
+- if defined?(@post)
+  - current_category = @post.category
+  
+%ul.nav.bs-sidenav
+  %li{:class => current_category.blank? ? "active" : ""}
+    = link_to "All Posts", posts_path
+
+  - Post::CATEGORIES.each do |key, category|
+    %li{:class => current_category == key ? "active" : ""}
+      = link_to category, posts_path(:category => key)

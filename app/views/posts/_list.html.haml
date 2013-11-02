@@ -1,0 +1,9 @@
+.posts
+  - if @posts.blank?
+    %p.no-post
+      = t("post.no_post")
+  - else
+    - @posts.each do |post|
+      = render :partial => "a_post", :locals => {:post => post, :title_is_link => true}
+
+      %hr

@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require bootstrap
 //= require tinymce
+//= require cloudinary
 //= require_tree .

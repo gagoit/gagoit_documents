@@ -2,4 +2,39 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  na: N / A
+  date:
+    order:
+    - :month
+    - :day
+    - :year
+    formats:
+      default: "%m-%d-%Y"
+
+  time:
+    formats:
+      short: "%m-%d-%Y at %I:%M %P"
+      long: "%B %d, %Y at %I:%M %P"
+      date: "%m-%d-%Y"
+
+  mongoid:
+    models:
+      post: Post
+      comment: Comment
+
+    attributes: &model_attribute_tranlations
+      post:
+        title: Title
+        body: Body
+        created_by: Created by
+        category: Category
+
+    errors:
+      models:
+        post:
+          attributes:
+            title:
+              is_required: Post title is required
+
+  post:
+    no_post: There is no post in this category!
