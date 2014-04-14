@@ -1,0 +1,39 @@
+%nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
+  .container
+    .navbar-header
+      %button.navbar-toggle{"data-target" => ".navbar-ex1-collapse", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      / You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it)
+      %a.navbar-brand{:href => root_url} Gagoit
+    / Collect the nav links, forms, and other content for toggling
+    .collapse.navbar-collapse.navbar-ex1-collapse
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          %a{:href => about_path} About
+      
+        %li
+          %a{:href => posts_path} Posts
+        
+        - if user_signed_in?
+          %li.dropdown
+            %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+              = current_user.name
+              %b.caret
+            %ul.dropdown-menu
+              %li
+                = link_to('Account Info', edit_user_registration_path)
+
+              %li
+                = link_to('Logout', destroy_user_session_path, :method => 'delete')
+              
+        - else 
+          %li
+            = link_to('Login', new_user_session_path)
+          %li
+            = link_to('Sign up', new_user_registration_path)
+        
+    / /.navbar-collapse
+  / /.container

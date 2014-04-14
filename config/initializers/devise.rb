@@ -4,7 +4,9 @@ Devise.setup do |config|
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "please-change-me-at-config-initializers-devise@example.com"
+  config.mailer_sender = "vuongtieulong02@gmail.com"
+
+  config.secret_key = '981e81b4117829ced6b4dcb82c24673c0c83e73127ec7dad33b0d9da88a2a62c7f73f79527bf6a94d2e8787d32ad009ac524b8a0b6db80478c41ebc2ddd108e7'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
@@ -23,7 +25,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  # config.authentication_keys = [ :email ]
+  config.authentication_keys = [ :email ]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -59,7 +61,7 @@ Devise.setup do |config|
   # config.http_authenticatable = false
 
   # If http headers should be returned for AJAX requests. True by default.
-  # config.http_authenticatable_on_xhr = true
+  config.http_authenticatable_on_xhr = false
 
   # The realm used in Http Basic Authentication. "Application" by default.
   # config.http_authentication_realm = "Application"
@@ -115,7 +117,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
-  # config.remember_for = 2.weeks
+  config.remember_for = 4.weeks
 
   # If true, extends the user's remember period when remembered via cookie.
   # config.extend_remember_period = false
@@ -211,7 +213,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  # config.navigational_formats = ["*/*", :html]
+  config.navigational_formats = ["*/*", :html, :json]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = Rails.env.test? ? :get : :delete
@@ -220,6 +222,18 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
+  require "omniauth-facebook"
+  config.omniauth :facebook, OMNIAUTH_PROVIDERS["facebook"][:app_id], OMNIAUTH_PROVIDERS["facebook"][:app_secret], :scope => 'email,user_birthday,user_interests,user_likes,user_location,user_checkins,user_events,friends_birthday,friends_likes,friends_location,friends_checkins,publish_stream,read_stream,export_stream,read_friendlists'
+
+  require "omniauth-twitter"
+  config.omniauth :twitter, OMNIAUTH_PROVIDERS["twitter"][:app_id], OMNIAUTH_PROVIDERS["twitter"][:app_secret]
+
+  require "omniauth-google-oauth2"
+  config.omniauth :google_oauth2, OMNIAUTH_PROVIDERS["google_oauth2"][:app_id], OMNIAUTH_PROVIDERS["google_oauth2"][:app_secret], { access_type: "offline", approval_prompt: "force", scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile', name: 'google'}
+
+  require "omniauth-linkedin"
+  config.omniauth :linkedin, OMNIAUTH_PROVIDERS["linkedin"][:app_id], OMNIAUTH_PROVIDERS["linkedin"][:app_secret], :scope => 'r_fullprofile r_emailaddress r_network w_messages', :fields => ["id", "email-address", "first-name", "last-name", "headline", "industry", "picture-url", "public-profile-url", "location", "connections"]
+
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

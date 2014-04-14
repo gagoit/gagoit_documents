@@ -30,10 +30,15 @@ GagoitDocuments::Application.configure do
   config.assets.debug = true
 
   # ActionMailer Config
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  # A dummy setup for development - no deliveries, but logged
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = false
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default :charset => "utf-8"
+  config.action_mailer.default_url_options = { :host => '192.168.4.177', :port => 3003 }
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.gmail.com",
+    :port => 587,
+    :domain => "gmail.com",
+    :user_name => "minhnhanlk04@gmail.com",
+    :password => "0934217493",
+    :authentication => "plain",
+    :enable_starttls_auto => true
+  }
 end

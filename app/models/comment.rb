@@ -1,6 +1,7 @@
 class Comment
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Sunspot::Mongo
 
   # for paiging
   extend WillPaginate::PerPage
@@ -8,10 +9,14 @@ class Comment
   attr_accessible :body, :created_by
 
   field :body, type: String
-  
-  embedded_in :post
 
-  belongs_to :created_by, :class_name => 'User' 
+  searchable do
+    text :body
+  end
+  
+  belongs_to :post
+
+  belongs_to :created_by, :class_name => 'User'
 
   validates :body , :presence => true
 

@@ -1,18 +1,43 @@
-%h2
-  - if title_is_link
-    = link_to post.title, post, :target => 'blank'
-  - else
-    = post.title
-%h4 
-  by
-  = post.created_by.name
-%p
-  %i 
-    Last updated 
-    = post.updated_at.strftime("%B %d, %Y")
+%hr
+  %h2
+    - if title_is_link
+      = link_to post.title, post, :target => 'blank'
+    - else
+      = post.title
+  %p
+    %i.fa.fa-clock-o
+    Posted on
+    = post.created_at.strftime("%H:%M on %B %d, %Y")
+    by
+    %a{:href => "#"}
+      = post.created_by.try(:name)
 
-%p 
-  = raw post.body
-%br
+  %hr
+    %img.img-responsive{:src => "http://placehold.it/900x300"}
+      %hr
+      .body
+        = raw post.body
 
-= yield
+      %hr
+        / the comments
+        .comments
+          %h4
+            Comments
+          
+          %h4.comment-count 
+            = pluralize post.comments.size, 'comment'
+
+          %ul
+            - post.comments.each do |comment|
+              %li.row
+                = render :partial => "comments/comment", :locals => {:comment => comment}
+
+            %li.row
+              .user-avatar.col-lg-2
+                = image_tag 'no-avatar.jpg'
+              .content-form.col-lg-10
+                = form_for [post, post.comments.new] do |f|
+                  %p 
+                    = f.text_area :body, :rows => '3', :style => 'width: 100%;', :class => 'tinymce'
+                  %p 
+                    = f.submit "Post comment"

@@ -1,0 +1,342 @@
+/**
+* Invite Friends Module
+* @author DatPB
+**/
+var InviteFriends = {
+  /**
+  *
+  **/
+  init: function(){
+    this.init_facebook_api();
+    this.init_events();
+  },
+
+  /**
+  * Init Events
+  **/
+  init_events: function(){
+    var self = this;
+
+    if($(".friendships").length > 0){
+      $("ul.social_networks li").click(function(){
+        var provider = $(this).data("provider");
+        if(provider == "facebook"){
+          if(typeof FB != "undefined"){
+            // The person authenticated with our app
+            if(FB.getUserID() != ""){
+              self.open_send_msg_facebook_dialog();
+            }else{
+              self.authenticate_facebook();
+            }
+          }
+        }else{
+          window.location = 'friendships/find_social_friends?provider=' + provider;
+        }
+
+      });
+    }
+
+    if($(".invite_friends").length > 0){
+      self.show_hide_check_uncheck_all();
+
+      /** Search Friends in list **/
+      if($("input#search_friends").length > 0){
+        $("input#search_friends")[0].addEventListener("input", function (){
+          var search_key = $(this).val().toLowerCase();
+
+          var friends_list = $(".friends_list ul li input");
+
+          friends_list.each(function(index, field){
+            if($(field).data("name").toLowerCase().indexOf(search_key) > -1 || $(field).data("email").toLowerCase().indexOf(search_key) > -1){
+              $(field).closest("li").show();
+            }else {
+              $(field).closest("li").hide();
+            }
+          });
+
+          self.show_hide_check_uncheck_all();
+        });
+      }
+
+      /** For Invite friends from Email **/
+      if($(".friends_list").data('provider') == "email"){
+
+        $("input#add_email").keydown(function(event){
+          if(event.keyCode == 13){ //hit Enter
+            self.add_friend_to_list($("input#add_email").val());
+          }
+        });
+      }
+
+      $(".friends_list ul").delegate("li input", "click", function(){
+        self.show_hide_check_uncheck_all();
+      });
+
+
+      $(".friends_list #check_all").click(function(){
+        $(".friends_list ul li input").each(function(i, field){
+          field.checked = true;
+        })
+
+        $(".friends_list #uncheck_all").show();
+        $(".friends_list #check_all").hide();
+
+        self.set_selected_text();
+        return false;
+      });
+
+      $(".friends_list #uncheck_all").click(function(){
+        $(".friends_list ul li input").filter(':checked').each(function(i, field){
+          field.checked = false;
+        })
+
+        $(".friends_list #uncheck_all").hide();
+        $(".friends_list #check_all").show();
+
+        self.set_selected_text();
+
+        return false;
+      });
+
+      /** Submit Invitation **/
+      $(".email_form #inviteButton").click(function(){
+        var provider = $(".invite_friends .friends_list").data("provider");
+
+        var selected_str = "";
+        var message = $(".email_form #message").val().trim();
+
+        if(provider == "linkedin" || provider == "twitter" || provider == "facebook"){
+          selected_str = self.get_selected_friends_uid();
+        }else{
+          selected_str = self.get_selected_friends_email();
+        }
+
+        if(selected_str.trim().length == 0){
+          Gagoit.showAlertMessage($(".message_inline"), "error", "No recipients specified.");
+        }else if(message.length == 0){
+          Gagoit.showAlertMessage($(".message_inline"), "error", "Message content is empty. Please enter the content.");
+        }else if(message.length > 100){
+          Gagoit.showAlertMessage($(".message_inline"), "error", "Message can only contain up to 100 characters.");
+        }else if(provider == "twitter" && Gagoit.checkUrlInText(message)){
+          Gagoit.showAlertMessage($(".message_inline"), "error", "Message can not contain the URLs.");
+        }else{
+          /** Send Invitation **/
+          $.ajax("/friendships/send_invitations", {
+            type: 'POST',
+            data: {
+              selected_str: selected_str,
+              message: message,
+              provider: provider
+            }
+          }).done(function(ev){
+            Gagoit.showAlertMessage($(".message_inline"), ev.type, ev.message);
+
+            if(ev.type == "success"){
+              $(".friends_list ul").html('');
+              self.show_hide_check_uncheck_all();
+            }
+          });
+        }
+      });
+
+      $(".email_form #cancelButton").click(function(){
+        window.location = "/friendships";
+      });
+
+      $(".friend_image img").error(function() {
+        $( this ).attr( "src", "/images/fallback/thumb_default.png" );
+      });
+
+    }
+  },
+
+  /**
+  * Init Facebook API
+  **/
+  init_facebook_api: function(){
+    if($("ul.social_networks li").length > 0){
+      $.ajaxSetup({ cache: true });
+      $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+        FB.init({
+          appId: '241347336054968', //'652021661512292',
+          status: true,
+          cookie: true, // enable cookies to allow the server to access the session
+          xfbml: true  // parse XFBML
+        });
+        $('#loginbutton,#feedbutton').removeAttr('disabled');
+        FB.getLoginStatus();
+      });
+    }
+  },
+
+  /**
+  * Open the Send Message dialog
+  **/
+  open_send_msg_facebook_dialog: function(){
+    if(typeof FB != "undefined"){
+      FB.ui({
+        method: 'send',
+        link: 'http://masterkc.com/users/sign_in.html'
+      });
+    }
+  },
+
+  /**
+  * Authenticate with Facebook
+  **/
+  authenticate_facebook: function(){
+    var self = this;
+
+    if(typeof FB != "undefined"){
+      FB.login(function(response) {
+        if (response.authResponse) {
+          // The person logged into our app
+          self.open_send_msg_facebook_dialog();
+
+          //get friends and make friends in Gagoit
+          //self.get_and_make_facebook_friends_in_Gagoit();
+        } else {
+          // The person cancelled the login dialog
+        }
+      });
+    }
+  },
+
+  /**
+  * get friends and make friends in Gagoit
+  **/
+  get_and_make_facebook_friends_in_Gagoit: function(){
+    var self = this;
+
+    if(typeof FB != "undefined"){
+      var uids = [];
+
+      FB.api('/me/friends', function(response) {
+        response.data.each(function(index, friend){
+          uids.push(friend.id);
+        });
+
+        $.ajax("/friendships/make_friend_with_social_friends_in_gagoit", {
+          type: 'POST',
+          data: {
+            uids: uids.join(","),
+            provider: provider
+          }
+        }).done(function(ev){
+          
+        });
+      });
+    }
+  },
+
+  /**
+  * Get Selected Friends Email
+  *
+  **/
+  get_selected_friends_email: function(){
+    var emails = [];
+    var email = "";
+    $(".friends_list ul li input").filter(':checked').each(function(index, field){
+      email = field.value.trim();
+      if(email.length > 0){
+        emails.push(email);
+      }
+    });
+
+    return emails.join(',');
+  },
+
+  /**
+  * Get Selected uid for LinkedIn
+  **/
+  get_selected_friends_uid: function(){
+    var uids = [];
+    var uid = "";
+    $(".friends_list ul li input").filter(':checked').each(function(index, field){
+      uid = $(field).data("uid").toString().trim();
+      if(uid.length > 0){
+        uids.push(uid);
+      }
+    });
+
+    return uids.join(',');
+  },
+
+  /**
+  * Set selected text
+  **/
+  set_selected_text: function(){
+    $(".friends_list #num_of_selected").text("Selected: " + $(".friends_list ul li input").filter(':checked').length);
+  },
+
+  /**
+  * Show/Hide check/uncheck all
+  **/
+  show_hide_check_uncheck_all: function(){
+    var num_of_friends = $(".friends_list ul li input").length;
+    var num_checked = $(".friends_list ul li input").filter(':checked').length;
+    if(num_of_friends == 0){
+      $(".friends_list #uncheck_all").hide();
+      $(".friends_list #check_all").hide();
+    }else if(num_checked == num_of_friends){
+      $(".friends_list #uncheck_all").show();
+      $(".friends_list #check_all").hide();
+    }else if(num_checked == 0){
+      $(".friends_list #uncheck_all").hide();
+      $(".friends_list #check_all").show();
+    }else{
+      $(".friends_list #uncheck_all").show();
+      $(".friends_list #check_all").show();
+    }
+
+    this.set_selected_text();
+  },
+
+  /**
+  * Check Email is added to list
+  **/
+  email_is_added: function(email){
+    if($(".friends_list ul li input[value='" + email + "']").length > 0){
+      return true;
+    }
+    return false;
+  },
+
+  /**
+  * add_friend_to_list
+  **/
+  add_friend_to_list: function(email, name, uid, image_url){
+    if(!this.IsEmail(email) || this.email_is_added(email)){
+      return "";
+    }
+
+    var li_template = '<li>'
+          + '<input type="checkbox" checked="checked" value="' + email + '" data-name="' + (typeof name != "undefined" ? name : "") + '" data-email="' + email + '" name="friend_' + email + '" data-uid="' + (typeof uid != "undefined" ? uid : "") + '">'
+          + '<div class="friend_image">'
+          +  '<img src="' + (typeof image_url != "undefined" ? image_url : "/images/fallback/thumb_default.png") + '"></img>'
+          + '</div>'
+
+          + '<div class="friend_info">'
+          +  '<label for="friend_' + email + '">' + email + '</label>'
+          + '</div>'
+        + '</li>';
+
+    $(".friends_list ul").append(li_template);
+    $("input#add_email").val('');
+    $("input#add_email").focus();
+
+    this.show_hide_check_uncheck_all();
+  },
+
+  /**
+  * Validate email
+  **/
+  IsEmail: function(email) {
+    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(email);
+  }
+}
+
+$(function() {
+  InviteFriends.init();
+});

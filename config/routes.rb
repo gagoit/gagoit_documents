@@ -2,17 +2,19 @@ GagoitDocuments::Application.routes.draw do
 
   resources :posts do
     resources :comments
-  end
 
+    get "search", on: :collection, defaults: {format: :html}
+  end
 
   root :to => 'home#index'
 
-  devise_for :users, :path_names => {:sign_in => 'login', :sign_out => 'logout', :sign_up => 'register'} 
+  devise_for :users, :path_names => {:sign_in => 'login', :sign_out => 'logout', :sign_up => 'register'}, 
+    :controllers => { :omniauth_callbacks => "users/omniauth_callbacks", registrations: "registrations"} 
 
+  resources :users
 
-  resources :users  
- 
-  match "/images/uploads/*path" => "gridfs#serve"
+  match "/about", to: "static_pages#about"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

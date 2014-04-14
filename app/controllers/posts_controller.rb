@@ -3,7 +3,12 @@ class PostsController < ApplicationController
   # GET /posts.json
   respond_to :html, :xml, :json
   
+  layout "post_layout"
+
   def index
+    page = (params[:page].to_i || 1).to_i
+    per_page = (params[:per_page] || 30).to_i
+
     if params[:category].blank?
       @posts = Post.all
     else
@@ -85,6 +90,27 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to posts_url }
       format.json { head :no_content }
+    end
+  end
+
+  ##
+  # Full Text search
+  ##
+  def search
+    if params[:search].blank?
+      @posts = Post.all
+    else
+      search = Post.solr_search do
+        fulltext params[:search]
+        paginate :page => 1, :per_page => 500
+      end
+
+      @posts = search.results
+    end
+
+    respond_to do |format|
+      format.html {render :layout => false}
+      format.json { render json: @posts }
     end
   end
 end

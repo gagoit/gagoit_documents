@@ -1,0 +1,17 @@
+.comment
+  .user-avatar.col-lg-2
+    = image_tag avatar_url(comment.created_by) 
+  .content.col-lg-10
+    .header
+      %p 
+        %span.user-name
+          = link_to comment.created_by.name, comment.created_by if comment.created_by
+        %span.action
+          commented
+        %span.time-post
+          = time_ago_in_words comment.created_at 
+          ago
+
+    .body
+      %p 
+        = raw comment.body

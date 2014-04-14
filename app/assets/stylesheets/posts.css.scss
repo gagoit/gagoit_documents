@@ -2,116 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.span12 {
-  margin-left: 20px;
-}
-.posts {
-  p.no-post {
-    font-weight: bold;
-    font-size: 30px;
-    line-height: 30px;
-  }
-  
-	h2 a {
-		color: green;
-	}
-  .post {
-    border: 1px solid #CACACA;
-    margin-bottom: 20px;
-    padding: 0 10px 0 10px;
-
-    .title {
-      p {
-        font-size: 30px;
-        line-height: 44px;
-        color: green;
-      }
-    }
-
-    .author {
-      p {
-        font-size: 14px;
-        color: black;
-      }
-    }
-
-    .last-update {
-      p {
-        font-size: 13px;
-      }
-    }
-
-    .post-content {
-
-    }
-  }
-}
-
-.post {
-	ul {
-		list-style-type: none;
-		margin: 0;
-
-		li {
-			margin-bottom: 5px;
-		}
-	}
-  .comments {
-  	.user-name {
-  		a {
-  			color: blue;
-  		}
-  	}
-
-    .comment{
-      min-height: 32px;
-      border: 1px solid #CACACA;
-      background-color: #fff;
-
-      .header {
-        height: 17px;
-        padding: 5px 10px 5px 6px;
-        border-bottom: 1px solid #ccc;
-        background-color: #e1e1e1;
-        background-image: linear-gradient(#f8f8f8, #e1e1e1);
-        background-repeat: repeat-x;
-        p {
-          font-size: 12px;
-          margin: 0;
-        }
-      }
-
-      .action {
-        font-size: 12px;
-        color: #333333;
-      }
-
-      .time-post {
-        color: rgba(30,55,70,0.4);
-        float: right;
-      }
-
-      .body {
-        padding: 0;
-        color: #333;
-        font-size: 12px;
-        background: #fbfbfb;
-
-        p {
-          padding: 0 10px;
-        }
-      }
-    }
-    
-  	h4.comment-count {
-  		font-weight: normal;
-  		margin-bottom: 20px;
-  	}
-
-    
-  }
-}
-
 .new-post {
   .field {
     input, textarea {
@@ -124,4 +14,78 @@
 	input[type=text], textarea {
 		width: 99%;
 	}
+}
+
+.comments {
+  ul {
+    list-style-type: none;
+
+    li {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.comments {
+
+  .user-avatar {
+    img {
+      width: 70px;
+    }
+  }
+
+  .content {
+    border: 1px solid #CACACA;
+  }
+
+  .content, .content-form {
+    padding: 0;
+  }
+
+  .content-form {
+    textarea {
+      height: 72px;
+      resize:vertical;
+    }
+  }
+}
+
+.comment{
+  min-height: 70px;
+  background-color: #fff;
+
+  .header {
+    height: 25px;
+    padding: 5px 10px 5px 6px;
+    border-bottom: 1px solid #ccc;
+    background-color: #e1e1e1;
+    background-image: linear-gradient(#f8f8f8, #e1e1e1);
+    background-repeat: repeat-x;
+    p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+
+  .action {
+    font-size: 12px;
+    color: #333333;
+  }
+
+  .time-post {
+    color: rgba(30,55,70,0.4);
+    float: right;
+  }
+
+  .body {
+    margin-top: 10px;
+    padding: 0;
+    color: #333;
+    font-size: 12px;
+    background: #fbfbfb;
+
+    p {
+      padding: 0 10px;
+    }
+  }
 }

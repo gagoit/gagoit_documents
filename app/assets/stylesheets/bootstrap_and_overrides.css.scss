@@ -1,6 +1,6 @@
 @import "bootstrap";
 body { padding-top: 60px; }
-@import "bootstrap-responsive";
+/*@import "bootstrap-responsive";*/
 
 .navbar .user {
   float: right;
@@ -11,4 +11,16 @@ body { padding-top: 60px; }
 
 .alert .close { 
   top: 0;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.container {
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 0;
+	padding-right: 0;
 }

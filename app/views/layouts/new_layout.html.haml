@@ -1,0 +1,34 @@
+!!!
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1"}
+    %title= content_for?(:title) ? yield(:title) : "Gagoit Documents"
+    %meta{:content => content_for?(:description) ? yield(:description) : "Gagoit Documents", :name => "description"}
+    = stylesheet_link_tag :application, :media => "all"
+    = javascript_include_tag :application
+    = csrf_meta_tags
+    = yield(:head)
+
+  %body
+    = render :partial => "layouts/top_nav"
+    = render :partial => "layouts/banner"
+    .section
+      .container
+        - if current_user
+          .row
+            - if params[:controller].include?("devise/") || params[:controller].to_s == "home" || params[:controller].to_s == "users"
+              = yield
+            - else
+              = render 'layouts/messages'
+              = yield
+        - else
+          .row
+            = yield
+        / /.row
+      / /.container
+    / /.section
+    
+    .container
+      = render "layouts/footer"
+    / /.container
+    / JavaScript

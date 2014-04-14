@@ -1,6 +1,7 @@
 class Post
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Sunspot::Mongo
 
   # for paiging
   extend WillPaginate::PerPage
@@ -13,15 +14,24 @@ class Post
     "javascript_jquery" => "Javascript & Jquery",
     "java" => "Java",
     "database" => "Database",
-    "other" => "Other"
+    "others" => "Others"
   }
 
   field :title, type: String
   field :body, type: String
   field :category, type: String
 
+  searchable do
+    text :title
+    text :body
+
+    text :comments do
+      comments.map { |comment| "#{comment.body}" }
+    end
+  end
+
   belongs_to :created_by, :class_name => 'User'
-  embeds_many :comments, :order => [[:created_at, :asc]]
+  has_many :comments, :order => [[:created_at, :asc]]
 
   validates :title, :body , :presence => true
   validates :category, :presence => true, :inclusion => { :in => CATEGORIES.keys }

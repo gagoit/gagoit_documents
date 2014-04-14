@@ -1,38 +1,31 @@
-%h2
-  Edit #{resource_name.to_s.humanize}
-= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f|
-  = devise_error_messages!
-  %p
-    = f.label :name
+.regitrations
+  %h2
+    Edit #{resource_name.to_s.humanize}
+  = bootstrap_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put, :multipart => true }) do |f|
+    = devise_error_messages!
+    
+    .fileinput.fileinput-new{"data-provides" => "fileinput"}
+      .fileinput-preview.thumbnail{"data-trigger" => "fileinput", :style => "width: 200px; height: 150px;"}
+      %div
+        %span.btn.btn-default.btn-file
+          %span.fileinput-new Select image
+          %span.fileinput-exists Change
+          %input{id: "user_avatar", name: "user[avatar]", :type => "file"}/
+        %a.btn.btn-default.fileinput-exists{"data-dismiss" => "fileinput", :href => "#"} Remove
     
     = f.text_field :name
-  %p
-    = f.label :email
     
     = f.email_field :email
-
-  %p
-    = f.label :about_me
+    
     = f.text_area :about_me, :size => '10x5'
 
-  %p
-    = f.label :avatar
-    = f.file_field :avatar
-
-  %p
-    = f.label :password
-    %i (leave blank if you don't want to change it)
-    %br
     = f.password_field :password
-  %p
-    = f.label :password_confirmation
     
     = f.password_field :password_confirmation
-  %p
-    = f.label :current_password
-    %i (we need your current password to confirm your changes)
-    %br
+    
     = f.password_field :current_password
-  %p= f.submit "Update"
+    
+    = f.submit "Update"
 
-= link_to "Back", :back
+  %br
+  = link_to "Back", :back

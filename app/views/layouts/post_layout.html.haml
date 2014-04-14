@@ -1,0 +1,65 @@
+!!!
+%html
+  %head
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1"}
+    %title= content_for?(:title) ? yield(:title) : "Gagoit Documents"
+    %meta{:content => content_for?(:description) ? yield(:description) : "Gagoit Documents", :name => "description"}
+    = stylesheet_link_tag :application, :media => "all"
+    = javascript_include_tag :application
+    = csrf_meta_tags
+    = yield(:head)
+
+  %body
+    = render :partial => "layouts/top_nav"
+    = render :partial => "layouts/banner"
+    .section
+      .container
+        .row
+          .col-lg-8
+            / the actual blog post: title/author/date/content
+            - if current_user
+              - if params[:controller].include?("devise/") || params[:controller].to_s == "home" || params[:controller].to_s == "users"
+                = yield
+              - else
+                = render 'layouts/messages'
+                = yield
+            - else
+              = yield
+
+          .col-lg-4
+            .well
+              %h4 Post Search
+              .input-group
+                %input.form-control{:type => "text", :id => "search_posts"}
+                  %span.input-group-btn
+                    %button.btn.btn-default{:type => "button"}
+                      %i.fa.fa-search
+              / /input-group
+            / /well
+            .well
+              %h4 Popular Post Categories
+              .row
+                - current_category = params[:category]
+                - if defined?(@post)
+                  - current_category = @post.category
+                  
+                %ul.nav.bs-sidenav
+                  %li{:class => current_category.blank? ? "active" : ""}
+                    = link_to "All Posts", posts_path
+
+                  - Post::CATEGORIES.each do |key, category|
+                    %li{:class => current_category == key ? "active" : ""}
+                      = link_to category, posts_path(:category => key)
+            / /well
+            .well
+              %h4 Side Widget Well
+              %p Bootstrap's default well's work great for side widgets! What is a widget anyways...?
+        
+        / /.row
+      / /.container
+    / /.section
+    
+    .container
+      = render "layouts/footer"
+    / /.container
+    / JavaScript
