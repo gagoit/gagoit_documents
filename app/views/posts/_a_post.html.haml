@@ -13,25 +13,24 @@
       = post.created_by.try(:name)
 
   %hr
-    %img.img-responsive{:src => "http://placehold.it/900x300"}
-      %hr
-      .body
-        = raw post.body
+    .body
+      = raw post.body
 
-      %hr
-        / the comments
-        .comments
-          %h4
-            Comments
-          
-          %h4.comment-count 
-            = pluralize post.comments.size, 'comment'
+    %hr
+      / the comments
+      .comments
+        %h4
+          Comments
+        
+        %h4.comment-count 
+          = pluralize post.comments.size, 'comment'
 
-          %ul
-            - post.comments.each do |comment|
-              %li.row
-                = render :partial => "comments/comment", :locals => {:comment => comment}
+        %ul
+          - post.comments.each do |comment|
+            %li.row
+              = render :partial => "comments/comment", :locals => {:comment => comment}
 
+          - if current_user
             %li.row
               .user-avatar.col-lg-2
                 = image_tag 'no-avatar.jpg'
@@ -41,3 +40,9 @@
                     = f.text_area :body, :rows => '3', :style => 'width: 100%;', :class => 'tinymce'
                   %p 
                     = f.submit "Post comment"
+          - else
+            %li.row
+              %p 
+                Please 
+                %a{:href => new_user_session_path} login
+                to post the comment

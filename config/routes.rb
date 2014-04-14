@@ -14,6 +14,7 @@ GagoitDocuments::Application.routes.draw do
   resources :users
 
   match "/about", to: "static_pages#about"
+  match "/cat_tuong", to: "static_pages#cat_tuong"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

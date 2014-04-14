@@ -1,0 +1,10 @@
+%section#photostack-1.photostack.photostack-start
+  %div
+    - images = Dir.glob("app/assets/images/cach_cach/**/*").map{|e| "assets/cach_cach/" + e.split("app/assets/images/cach_cach/")[1]}
+
+    - images.each_with_index do |image, index|
+      %figure
+        %a.photostack-img{:href => image}
+          %img{:alt => image, :src => image}/
+        %figcaption
+          %h2.photostack-title Serenity Beach
