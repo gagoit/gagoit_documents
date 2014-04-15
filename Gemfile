@@ -48,7 +48,7 @@ gem 'backbone-rails'
 
 gem "thin", ">= 1.5.0"
 
-gem 'bson_ext', '~> 1.8.3'
+gem 'moped'
 gem "mongoid", ">= 3.1.2"
 
 gem "devise", ">= 2.2.3"
@@ -58,7 +58,6 @@ gem "rspec-rails", ">= 2.12.2", :group => [:development, :test]
 gem "factory_girl_rails", ">= 4.2.0", :group => [:development, :test]
 
 
-gem 'bootstrap-sass'
 gem 'bootstrap_form'
 
 gem 'will_paginate', :git => 'git://github.com/mikeycgto/will_paginate.git'

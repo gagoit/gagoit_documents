@@ -13,6 +13,8 @@ GagoitDocuments::Application.routes.draw do
 
   resources :users
 
+  resources :friendships
+
   match "/about", to: "static_pages#about"
   match "/cat_tuong", to: "static_pages#cat_tuong"
 

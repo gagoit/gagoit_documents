@@ -5,6 +5,6 @@
     - images.each_with_index do |image, index|
       %figure
         %a.photostack-img{:href => image}
-          %img{:alt => image, :src => image}/
+          = image_path image
         %figcaption
           %h2.photostack-title Serenity Beach

@@ -11,7 +11,8 @@
 
   %body
     = render :partial => "layouts/top_nav"
-    = render :partial => "layouts/banner"
+    - unless params[:controller].include?("devise/")
+      = render :partial => "layouts/banner"
     .section
       .container
         .row

@@ -1,4 +1,4 @@
-%nav.navbar.navbar-inverse.navbar-fixed-top{:role => "navigation"}
+%nav.navbar.navbar-default.navbar-fixed-top{:role => "navigation"}
   .container
     .navbar-header
       %button.navbar-toggle{"data-target" => ".navbar-ex1-collapse", "data-toggle" => "collapse", :type => "button"}
@@ -11,10 +11,10 @@
     / Collect the nav links, forms, and other content for toggling
     .collapse.navbar-collapse.navbar-ex1-collapse
       %ul.nav.navbar-nav.navbar-right
-        %li
+        %li{:class => (params[:controller] == "static_pages" && params[:action] == "about" ? "active" : "")}
           %a{:href => about_path} About
       
-        %li
+        %li{:class => (params[:controller] == "posts"  ? "active" : "")}
           %a{:href => posts_path} Posts
         
         - if user_signed_in?
@@ -30,9 +30,10 @@
                 = link_to('Logout', destroy_user_session_path, :method => 'delete')
               
         - else 
-          %li
-            = link_to('Login', new_user_session_path)
-          %li
+          %li{:class => (params[:controller] == "devise/sessions"  ? "active" : "")}
+            = link_to('Sign in', new_user_session_path)
+
+          %li{:class => (params[:controller] == "registrations"  ? "active" : "")}
             = link_to('Sign up', new_user_registration_path)
         
     / /.navbar-collapse

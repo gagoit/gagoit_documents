@@ -4,7 +4,7 @@
   %ol.carousel-indicators
     - images.each_with_index do |image, index|
       %li{class: (index == 0 ? "active" : ""), "data-slide-to" => index, "data-target" => "#myCarousel"}
-
+    
   / Wrapper for slides
   .carousel-inner
     - images.each_with_index do |image, index|

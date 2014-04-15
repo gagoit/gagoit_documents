@@ -1,0 +1,29 @@
+- excepts ||= []
+- text ||= ""
+
+%ul.list-unstyled.list-inline.list-social-icons
+
+  - unless text.blank?
+    %li.tooltip-social
+      %span
+        = text
+
+  - unless excepts.index("facebook")
+    %li.tooltip-social.facebook-link
+      %a{"data-placement" => "top", "data-toggle" => "tooltip", :href => user_omniauth_authorize_path("facebook"), :title => "Facebook"}
+        %i.fa.fa-facebook-square.fa-2x
+
+  - unless excepts.index("linkedin")
+    %li.tooltip-social.linkedin-link
+      %a{"data-placement" => "top", "data-toggle" => "tooltip", :href => user_omniauth_authorize_path("linkedin"), :title => "LinkedIn"}
+        %i.fa.fa-linkedin-square.fa-2x
+
+  - unless excepts.index("twitter")
+    %li.tooltip-social.twitter-link
+      %a{"data-placement" => "top", "data-toggle" => "tooltip", :href => user_omniauth_authorize_path("twitter"), :title => "Twitter"}
+        %i.fa.fa-twitter-square.fa-2x
+
+  - unless excepts.index("google")
+    %li.tooltip-social.google-plus-link
+      %a{"data-placement" => "top", "data-toggle" => "tooltip", :href => user_omniauth_authorize_path("google"), :title => "Google+"}
+        %i.fa.fa-google-plus-square.fa-2x

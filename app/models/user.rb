@@ -2,6 +2,7 @@ class User
   include Mongoid::Document
   include Mongoid::Paperclip
   include Mongoid::Timestamps
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -34,7 +35,7 @@ class User
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :about_me, 
       :avatar, :avatar_cache
 
-  validates :name, :email, :presence => true, :uniqueness => {:case_sensitive => false}
+  validates :email, :presence => true, :uniqueness => {:case_sensitive => false}
 
   has_mongoid_attached_file :avatar,
     :path => 'users/avatars/:id/:style.:extension',
@@ -70,6 +71,8 @@ class User
   has_many :posts
   has_many :comments
 
+  #references_and_referenced_in_many :friendships, :autosave => true
+
   ##
   # Dynamically create find_for_facebook_oauth and find_for_twitter_oauth methods
   [:facebook, :twitter, :linkedin, :google].each do |mode|
@@ -77,7 +80,7 @@ class User
       def self.find_for_#{mode}_oauth(omniauth_param, current_user=nil)
         data = JSON.parse(omniauth_param.to_json)
 
-        if current_user # Inviter Friends || Connect
+        if current_user # Invite Friends || Connect
           pro = Provider.find_or_create(data, current_user)
 
           current_user
@@ -86,7 +89,7 @@ class User
             email: data['info']['email'],
             first_name: data['info']['first_name'],
             last_name: data['info']['last_name'],
-            short_name: data['info']['nickname'] || "wb#{Devise.friendly_token[0,8]}"
+            name: data['info']['nickname'] || "wb#{Devise.friendly_token[0,8]}"
           }
 
           if user_fb[:email].blank?
@@ -105,5 +108,91 @@ class User
         end
       end
     RUBY_EVAL
+  end
+
+  ##
+  # Get List of friendships of a User
+  # @return {Array} friendships
+  # @author DatPB
+  ##
+  def friendships
+    fs = Friendship.any_of({inviter_id: self.id}, {invitee_id: self.id})
+  end
+
+  ##
+  # Get List of friend ids of a User
+  # @return {Array} friends ids
+  # @author DatPB
+  ##
+  def friend_ids
+    @friend_ids_cache ||= nil
+
+    if @friend_ids_cache.nil?
+      @friend_ids_cache=[]
+
+      friendships.completed.each do |fs|
+        if fs.inviter_id == self.id
+          @friend_ids_cache << fs.invitee_id
+        else
+          @friend_ids_cache << fs.inviter_id
+        end
+      end
+    else
+      @friend_ids_cache
+    end
+  end
+
+  ##
+  # Get List of not_confirm friend ids of a User
+  # @return {Array} friends ids
+  # @author DatPB
+  ##
+  def friend_ids_not_confirm
+    @friend_ids_not_confirm_cache ||= nil
+
+    if @friend_ids_not_confirm_cache.nil?
+      @friend_ids_not_confirm_cache=[]
+
+      friendships.not_completed.each do |fs|
+        if fs.inviter_id == self.id
+          @friend_ids_not_confirm_cache << fs.invitee_id
+        else
+          @friend_ids_not_confirm_cache << fs.inviter_id
+        end
+      end
+    else
+      @friend_ids_not_confirm_cache
+    end
+  end
+
+  ##
+  # Get List of friends of a User
+  # @return {Array} friends ids
+  # @author DatPB
+  ##
+  def friends
+    @friends_cache ||= User.find(friend_ids)
+
+    @friends_cache
+  end
+
+  ##
+  # Check a User is friend with user(self)
+  # @return {Boolean} true/false
+  # @author DatPB
+  ##
+  def is_friend?(user_id)
+    user_id = BSON::ObjectId(user_id) unless user_id.is_a?(BSON::ObjectId)
+    friend_ids.include?(user_id)
+  end
+
+  ##
+  # Check the user(self) has not completed friendship with a user or not
+  # @return {Boolean} true/false
+  # @author DatPB
+  ##
+  def not_completed_friend?(user_id)
+    user_id = BSON::ObjectId(user_id) unless user_id.is_a?(BSON::ObjectId)
+    friend_ids_not_confirm.include?(user_id)
   end
 end
