@@ -37,17 +37,13 @@ class User
 
   validates :email, :presence => true, :uniqueness => {:case_sensitive => false}
 
-  has_mongoid_attached_file :avatar,
-    :path => 'users/avatars/:id/:style.:extension',
-    :default_url => 'no-avatar.jpg',
-    
-    :hash_secret => GagoitDocuments::Application.config.paperclip_token,
-
-    :styles => {
-      :original => ['1920x1680>', :jpg],
-      :medium   => ['250x250',    :jpg],
-      :small    => ['70x70#',   :jpg]
-    }
+  has_mongoid_attached_file :avatar, styles: {  large: ["1024", :jpg],
+                                                :medium   => ['250x250',    :jpg],
+                                                :small    => ['70x70#',   :jpg],
+                                                thumb: ["100x100#", :jpg] },
+                                  convert_options: {all: ["-unsharp 0.3x0.3+5+0", "-quality 90%", "-auto-orient"]},
+                                  processors: [:thumbnail] ,
+                                  storage: :filesystem
 
   validates_attachment_content_type :avatar, :content_type => %w[image/png image/jpg image/jpeg image/gif]
 

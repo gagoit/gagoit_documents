@@ -1,4 +1,4 @@
-= form_for @post do |f|
+= bootstrap_form_for @post do |f|
   - if @post.errors.any?
     #error_explanation
       %h2= "#{pluralize(@post.errors.count, "error")} prohibited this post from being saved:"
@@ -6,17 +6,12 @@
         - @post.errors.full_messages.each do |msg|
           %li= msg
 
-  .field
-    = f.label :category
-    = f.select :category, options_for_select(Post::CATEGORIES.invert, f.object.category)
+  = f.select :category, options_for_select(Post::CATEGORIES.invert, f.object.category)
 
-  .field
-    = f.label :title
-    = f.text_field :title
-  .field
-    = f.label :body
-    = f.text_area :body, :class => 'tinymce'
-  .actions
-    = f.submit 'Save'
+  = f.text_field :title
+  
+  = f.text_area :body, :class => 'tinymce'
+  
+  = f.submit 'Save'
 
 = tinymce

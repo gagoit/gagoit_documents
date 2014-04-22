@@ -1,6 +1,6 @@
-%hr
+.post
   %h2
-    - if title_is_link
+    - if in_list
       = link_to post.title, post, :target => 'blank'
     - else
       = post.title
@@ -12,37 +12,12 @@
     %a{:href => "#"}
       = post.created_by.try(:name)
 
+  %br
+
+  .body
+    = raw post.body
+
   %hr
-    .body
-      = raw post.body
-
-    %hr
-      / the comments
-      .comments
-        %h4
-          Comments
-        
-        %h4.comment-count 
-          = pluralize post.comments.size, 'comment'
-
-        %ul
-          - post.comments.each do |comment|
-            %li.row
-              = render :partial => "comments/comment", :locals => {:comment => comment}
-
-          - if current_user
-            %li.row
-              .user-avatar.col-lg-2
-                = image_tag 'no-avatar.jpg'
-              .content-form.col-lg-10
-                = form_for [post, post.comments.new] do |f|
-                  %p 
-                    = f.text_area :body, :rows => '3', :style => 'width: 100%;', :class => 'tinymce'
-                  %p 
-                    = f.submit "Post comment"
-          - else
-            %li.row
-              %p 
-                Please 
-                %a{:href => new_user_session_path} login
-                to post the comment
+    / the comments
+    .comments
+      = render :partial => "comments/comments_for_post", :locals => {:post => post}

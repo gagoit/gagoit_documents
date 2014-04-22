@@ -45,8 +45,18 @@ class CommentsController < ApplicationController
   def create
     @comment = @post.comments.create(params[:comment])
     @comment.created!(current_user)
+    html_str = ''
+    with_format :html do
+      html_str = render_to_string :partial => "comments/comments_for_post", :locals => {:post => @post}
+    end
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { 
 
-    respond_with @post
+        render json: {html: html_str} 
+      }
+      format.js
+    end
   end
 
   # PUT /comments/1

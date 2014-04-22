@@ -18,9 +18,9 @@
           %a{:href => posts_path} Posts
         
         - if user_signed_in?
-          %li.dropdown
+          %li.dropdown.user-info
             %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-              = current_user.name
+              = image_tag current_user.avatar.url(:small)
               %b.caret
             %ul.dropdown-menu
               %li

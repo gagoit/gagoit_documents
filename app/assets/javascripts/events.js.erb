@@ -1,0 +1,27 @@
+
+/**
+* StaticPage Module for the application
+**/
+var Event = {
+  /**
+  * Init
+  **/
+  init: function(){
+    this.init_events();
+  },
+
+  /**
+  * Init Events
+  **/
+  init_events: function(){
+    var self = this;
+    if($("form#new_event").length > 0){
+      $("form#new_event").find('#event_date').datepicker();
+    }
+  }
+  
+}
+
+$(function() {
+  Event.init();
+});

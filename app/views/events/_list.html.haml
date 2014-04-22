@@ -1,0 +1,7 @@
+.events
+  - if @events.blank?
+    %p.no-event
+      = t("event.no_event")
+  - else
+    - @events.each do |event|
+      = render :partial => "an_event", :locals => {:event => event, :in_list => true}

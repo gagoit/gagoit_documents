@@ -1,0 +1,18 @@
+.event
+  %h2
+    - if in_list
+      = link_to event.title, event, :target => 'blank'
+    - else
+      = event.title
+  %p
+    %i.fa.fa-clock-o
+    Posted on
+    = event.created_at.strftime("%H:%M on %B %d, %Y")
+    by
+    %a{:href => "#"}
+      = event.created_by.try(:name)
+
+  %br
+
+  .body
+    = raw event.desciption

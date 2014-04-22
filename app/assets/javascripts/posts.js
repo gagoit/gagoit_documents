@@ -7,6 +7,9 @@
 * Include common functions for the application
 **/
 var Post = {
+  main_container: function(){
+    return $(".container > .row > .col-lg-8");
+  },
   /**
   * Init
   **/
@@ -19,13 +22,22 @@ var Post = {
   **/
   init_events: function(){
     var self = this;
+    
   	if($("input#search_posts").length > 0){
       $("input#search_posts").keydown(function(event){
         if(event.keyCode == 13){ //hit Enter
           self.search_posts($(this).val());
         }
       });
+
+      $("input#search_posts").next('.input-group-btn').click(function(event){
+        self.search_posts($("input#search_posts").val());
+      });
   	}
+
+    self.main_container().delegate('.new_comment', 'ajax:success',function(event, data, status, xhr){
+      $(this).closest(".comments").html(data.html);
+    });
   },
 
   /**
@@ -40,7 +52,7 @@ var Post = {
         search: search
       }
     }).done(function(ev){
-      $(".container > .row > .col-lg-8").html(ev);
+      self.main_container().html(ev);
     });
   }
   
