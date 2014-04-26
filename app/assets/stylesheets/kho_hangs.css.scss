@@ -1,0 +1,29 @@
+// Place all the styles related to the kho_hangs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.kho-hang {
+  width: 100%;
+  position: relative;
+  height: 800px;
+
+  .vi-tri { 
+    position: absolute;
+
+    &.ko_co_hang {
+      background-color: green;
+    }
+    
+    &.co_hang {
+      background-color: blue;
+    }
+
+    &.disable {
+      background-color: yellow;
+    }
+
+    &.full {
+      background-color: red;
+    }
+
+  }
+}

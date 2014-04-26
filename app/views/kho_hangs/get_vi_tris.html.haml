@@ -1,0 +1,4 @@
+- @vitris.each do |vitri|
+  - style = "left: #{vitri.left}px; top: #{vitri.top}px; width: #{vitri.width}px; height: #{vitri.height}px"
+  - style = "#{style}; background-color: #{vitri.color}; border: 1px solid gray"
+  .vi-tri{:'data-name' => vitri.vi_tri_name, class: vitri.status_text, style: style}

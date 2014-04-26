@@ -17,6 +17,14 @@ GagoitDocuments::Application.routes.draw do
 
   resources :events
 
+  resources :don_hangs do
+    resources :vi_tri_don_hangs
+  end
+
+  match "/khohang", to: "kho_hangs#index"
+
+  match "/khohang/get_vi_tris", to: "kho_hangs#get_vi_tris"
+
   match "/about", to: "static_pages#about"
   match "/cat_tuong", to: "static_pages#cat_tuong"
 

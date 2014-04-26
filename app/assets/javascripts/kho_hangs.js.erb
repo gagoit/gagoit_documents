@@ -1,0 +1,91 @@
+/**
+* Kho hang feature
+**/
+var KhoHang = {
+  main_container: function(){
+    return $(".container > .row > .kho-hang");
+  },
+  /**
+  * Init
+  **/
+  init: function(){
+    if(this.main_container().length > 0){
+      this.draw_layout();
+      this.init_events();
+    }
+  },
+
+  add_vi_tri: function(vi_tri){
+    var self = this;
+    $('<div class="vi-tri" data-name=""/>')
+      .appendTo(self.main_container())
+      .css("left", vi_tri.left + "px")
+      .css("top", vi_tri.top + "px")
+      .css("width", (vi_tri.width)+"px")
+      .css("height", (vi_tri.height)+"px")
+      .css("border", "1px solid red")
+      .css("background-color", vi_tri.color);
+  },
+
+  /**
+  *
+  **/
+  draw_layout: function(vi_tris){
+    var self = this;
+
+    self.get_vi_tris();
+    // var rects = [
+    //   {x1: 100, y1: 100, x2: 200, y2: 200},
+    //   {x1: 200, y1: 100, x2: 300, y2: 200},
+    //   {x1: 300, y1: 100, x2: 400, y2: 200},
+    // ];
+
+    // $.each(rects, function(index, vi_tris){
+    //   add_rect('green', rec);
+    // });
+
+  },
+
+  get_vi_tris: function(){
+    var self = this;
+    $.ajax("/khohang/get_vi_tris", {
+      type: 'GET',
+      data: {
+      }
+    }).done(function(ev){
+      self.main_container().html(ev);
+    });
+  },
+
+  set_vi_tris: function(){
+    $.ajax("/posts/search", {
+      type: 'GET',
+      data: {
+        search: search
+      }
+    }).done(function(ev){
+      self.main_container().html(ev);
+    });
+  },
+
+  /**
+  * Init Events
+  **/
+  init_events: function(){
+    var self = this;
+    
+    self.main_container().on('click', '.vi-tri', function(){
+      console.log(this);
+      this.style.backgroundColor = 'red';
+    });
+
+    self.main_container().on('mouseover', '.vi-tri', function(e){
+      console.log(e);
+    });
+  }
+  
+}
+
+$(function() {
+  KhoHang.init();
+});
