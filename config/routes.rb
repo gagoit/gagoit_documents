@@ -25,6 +25,8 @@ GagoitDocuments::Application.routes.draw do
 
   match "/khohang/get_vi_tris", to: "kho_hangs#get_vi_tris"
 
+  match "/khohang/get_vi_tri", to: "kho_hangs#get_vi_tri"
+
   match "/about", to: "static_pages#about"
   match "/cat_tuong", to: "static_pages#cat_tuong"
 

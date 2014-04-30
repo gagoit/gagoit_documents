@@ -38,3 +38,16 @@ en:
 
   post:
     no_post: There is no post in this category!
+
+  donhang:
+    mo: MO
+    batch: Batch
+    color: Color
+    return_date: Return_date
+    qty: QTY
+    unit: Unit
+    size: Size
+    remark: Remark
+    user_import: User
+    import_date: Ngay Nhap
+    so_luong: So Luong

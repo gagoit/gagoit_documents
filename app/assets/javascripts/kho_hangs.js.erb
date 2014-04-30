@@ -74,13 +74,49 @@ var KhoHang = {
   init_events: function(){
     var self = this;
     
-    self.main_container().on('click', '.vi-tri', function(){
-      console.log(this);
-      this.style.backgroundColor = 'red';
+    self.main_container().on('click', '.vi-tri', function(e){
+      var vi_tri = e.target;
+      self.get_vi_tri(vi_tri, vi_tri.dataset.name, "modal");
     });
 
     self.main_container().on('mouseover', '.vi-tri', function(e){
-      console.log(e);
+      var vitris = self.main_container().find('.vi-tri');
+      vitris.attr("data-toggle", "" );
+      vitris.attr("title", "" );
+      vitris.attr("data-original-title", "");
+
+      $(".tooltip").remove();
+
+      var vi_tri = e.target;
+      self.get_vi_tri(vi_tri, vi_tri.dataset.name, "tooltip");
+    });
+
+    $('body').on('click', '.modal-header .close', function(){
+      var modal = $(this).closest(".vitri.modal");
+      modal.modal("hide");
+      modal.remove();
+
+      $('.modal-backdrop').remove();
+    });
+  },
+
+  get_vi_tri: function(vitri_div, vitri, show_type){
+    var self = this;
+    $.ajax("/khohang/get_vi_tri", {
+      type: 'GET',
+      data: {
+        vitri: vitri,
+        show_type: show_type
+      }
+    }).done(function(ev){
+      if(show_type == "tooltip"){
+        $(vitri_div).attr("data-toggle", "tooltip" );
+        $(vitri_div).attr("title", ev);
+        $(vitri_div).tooltip({html: true});
+        $(vitri_div).tooltip('show');
+      }else{
+        $(ev).modal();
+      }
     });
   }
   

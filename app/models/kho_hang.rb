@@ -8,6 +8,8 @@ class KhoHang
   field :height, type: Integer
   field :status, type: Integer, default: 1
 
+  has_many :vi_tri_don_hangs
+
   STATUS ={1 => "ko_co_hang", 2 => "co_hang", 3 => "disable", 4 => "full"}
 
   INV_STATUS = STATUS.invert
@@ -16,8 +18,11 @@ class KhoHang
 
   validates :vi_tri_name, length: {maximum: 10}
 
+  scope :vitri, lambda { |name| where(vi_tri_name: name)  }
+
   def to_json
-    {   
+    {
+      id: id,
       name: vi_tri_name,
       left: left,
       top: top,
@@ -34,6 +39,26 @@ class KhoHang
 
   def color
     STATUS_COLORS[self.status]
+  end
+
+  def self.get_vi_tri(name)
+    vi_tri = self.vitri(name).first
+    return {} if vi_tri.nil?
+    vt_data = vi_tri.to_json
+
+    vt_data[:donhangs] = []
+
+    vi_tri.vi_tri_don_hangs.each do |e|
+      dh = e.donhang.to_json
+      dh[:so_luong] = e.so_luong
+      dh[:user_import] = e.user.name
+      dh[:import_date] = e.created_at
+      dh[:vt_dh_id] = e.id
+
+      vt_data[:donhangs] << dh.dup
+    end
+
+    vt_data
   end
 
   LABEL_LEFT = [
@@ -55,6 +80,10 @@ class KhoHang
     "A0--1--13", "-"]
 
   RACKS_NAME = ["A", "A0", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+
+  RACKS_NAME_LEFT = ["A0", "B", "C", "D", "E"]
+
+  RACKS_NAME_RIGHT = ["A", "F", "G", "H", "I", "J", "K"]
 
   NAME_LOAI = [
     "B409", "B309", "B209", "B109", "B410", "B310", "B210", "B110",

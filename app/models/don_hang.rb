@@ -20,4 +20,18 @@ class DonHang
 
   validates :mo, :batch, :color, length: {maximum: 100}
   validates :remark, length: {maximum: 1000}
+
+  def to_json
+    {
+      id: self.id,
+      mo: self.mo,
+      batch: self.batch,
+      color: self.color,
+      return_date: self.return_date,
+      qty: self.qty,
+      unit: self.unit,
+      size: self.size,
+      remark: self.remark
+    }
+  end
 end

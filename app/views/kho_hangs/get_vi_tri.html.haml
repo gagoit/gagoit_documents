@@ -1,0 +1,41 @@
+- if @show_type == "tooltip"
+  %p
+    Vi tri:
+    = @vitri[:name]
+
+  %p
+    So don hang:
+    = @vitri[:donhangs].length
+
+- else
+  .vitri.modal.fade
+    %div{class: "modal-content"}
+      %div{class: 'modal-dialog'}
+
+        %div{class: 'modal-header'}
+          %button{type: "button", class: "close", 'data-dismiss' => "modal", 'aria-hidden' => "true"} &times
+          %h4{class: "modal-title"} Vi Tri
+
+        %div{class: "modal-body"}
+          %p
+            Vi tri:
+            = @vitri[:name]
+
+          %p
+            So don hang:
+            = @vitri[:donhangs].length
+
+          - keys = [:mo, :batch, :color, :return_date, :size, :qty, :unit, :remark, :so_luong, :import_date, :user_import]
+
+          %table.don-hangs.table.table-bordered
+            %tr
+              - keys.each do |e|
+                %td
+                  = t("donhang.#{e}")
+
+            - @vitri[:donhangs].each do |dh|
+              %tr
+                - keys.each do |e|
+                  %td
+                    = dh[e]
+

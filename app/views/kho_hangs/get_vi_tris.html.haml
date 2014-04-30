@@ -1,4 +1,14 @@
 - @vitris.each do |vitri|
-  - style = "left: #{vitri.left}px; top: #{vitri.top}px; width: #{vitri.width}px; height: #{vitri.height}px"
-  - style = "#{style}; background-color: #{vitri.color}; border: 1px solid gray"
+  - style_position = "left: #{vitri.left}px; top: #{vitri.top}px; width: #{vitri.width}px; height: #{vitri.height}px"
+  - style = "#{style_position}; background-color: #{vitri.color}; border: 1px solid gray"
   .vi-tri{:'data-name' => vitri.vi_tri_name, class: vitri.status_text, style: style}
+  
+  - rack_name = vitri.vi_tri_name[0]
+  - if vitri.vi_tri_name.index("01") == 2
+    - if KhoHang::RACKS_NAME_LEFT.index(rack_name)
+      - new_left = vitri.left + vitri.width + 5
+    - else
+      - new_left = vitri.left - vitri.width
+
+    %p{style: "left: #{new_left}px; top: #{vitri.top - 2}px; width: #{vitri.width}px; height: #{vitri.height}px; position: absolute"}
+      = vitri.vi_tri_name[0..1]
